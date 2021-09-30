@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify, make_response,redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from  werkzeug.security import generate_password_hash, check_password_hash
-# imports for PyJWT authentication
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
@@ -12,7 +11,7 @@ from models import setup_db, User, Measure, db_drop_and_create_all
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='template')
     setup_db(app)
     CORS(app)    
     """ uncomment at the first time running the app """
@@ -66,8 +65,7 @@ def create_app(test_config=None):
                 object_area=object_area
             )
             # insert user
-            db.session.add(measure)
-            db.session.commit()
+            Measure.insert(measure)
     
             return make_response('Successfully Created.', 201)
         return render_template("measure/new.html")
@@ -91,8 +89,7 @@ def create_app(test_config=None):
         measure = Measure.query\
             .filter_by(id = request.form['id_to_delete'])\
             .first()
-        db.session.delete(measure)
-        db.session.commit()
+        Measure.delete(measure)
         return redirect(url_for('measure_list'))
 
 
@@ -160,10 +157,9 @@ def create_app(test_config=None):
                     password = generate_password_hash(password)
                 )
                 # insert user
-                db.session.add(user)
-                db.session.commit()
+                User.insert(user)
         
-                return redirect(url_for('user_home'))
+                return redirect(url_for('home'))
             else:
                 # returns 202 if user already exists
                 return make_response('User already exists. Please Log in.', 202)

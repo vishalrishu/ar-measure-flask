@@ -13,6 +13,7 @@ def setup_db(app):
     database_path = os.getenv('DATABASE_URL', default_database_path)
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SECRET_KEY"] = 'aaaaaaaa'
     db.app = app
     db.init_app(app)
 
@@ -35,6 +36,13 @@ class Measure(db.Model):
         self.object_width=object_width
         self.object_height=object_height
         self.object_area=object_area
+    def insert(self):
+        db.session.add(self)
+        db.session.commit() 
+           
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
 class User(db.Model):
     __tablename__='users'
@@ -47,3 +55,11 @@ class User(db.Model):
         self.name=name
         self.email=email
         self.password=password
+    
+    def insert(self):
+        db.session.add(self)
+        db.session.commit() 
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
