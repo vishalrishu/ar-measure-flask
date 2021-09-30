@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head></head>
+  <body>   
+    <table>
+      <thead>
+        <tr>
+          <th>Object Name</th>
+          <th>Object Width</th>
+          <th>Object Height</th>
+          <th>Object Area</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in measures %} 
+          <tr>
+            <td>{{row['object_name']}}</td>
+            <td>{{row['object_width']}}</td>
+            <td>{{row['object_height']}}</td>
+            <td>{{row['object_area']}}</td>
+            <td><form action="{{ url_for('measure_delete') }}" method=post class=delete-movie>
+                <input type=hidden value="{{ row['id'] }}"name=id_to_delete />
+                <input type=submit />
+              </form>
+              
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
