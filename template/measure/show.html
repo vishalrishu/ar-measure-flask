@@ -20,7 +20,7 @@
             <td>{{row['object_area']}}</td>
             <td><form action="{{ url_for('measure_delete') }}" method=post class=delete-movie>
                 <input type=hidden value="{{ row['id'] }}"name=id_to_delete />
-                <input type=submit />
+                <input type=submit value=Delete />
               </form>
               
             </td>
@@ -28,5 +28,6 @@
         {% endfor %}
       </tbody>
     </table>
+    <p><a href="{{ url_for('user_home') }}">Go to Home</a></p>
   </body>
 </html>

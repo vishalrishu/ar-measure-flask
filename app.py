@@ -15,7 +15,7 @@ def create_app(test_config=None):
     setup_db(app)
     CORS(app)    
     """ uncomment at the first time running the app """
-    db_drop_and_create_all()
+    # db_drop_and_create_all()
 
 # decorator for verifying the JWT
     def token_required(f):
@@ -66,8 +66,9 @@ def create_app(test_config=None):
             )
             # insert user
             Measure.insert(measure)
-    
-            return make_response('Successfully Created.', 201)
+            resp = make_response('Successfully created', 201)
+            resp = redirect(url_for('user_home'))
+            return resp
         return render_template("measure/new.html")
 
     @app.route("/measure/show", methods =['GET'])
@@ -85,7 +86,7 @@ def create_app(test_config=None):
 
     @app.route("/measure/delete", methods =['POST', 'GET'])
     @token_required
-    def measure_delete():
+    def measure_delete(current_user):
         measure = Measure.query\
             .filter_by(id = request.form['id_to_delete'])\
             .first()
